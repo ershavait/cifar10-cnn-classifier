@@ -13,11 +13,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model.pth")
 
 if not os.path.exists(MODEL_PATH):
-    print("Downloading model weights from Google Drive...")
+    print("Downloading model weights...")
     gdown.download(
-        "https://drive.google.com/file/d/13VUYaLnwFkHEHynumTskWq_8XAQa-qn2/view?usp=sharing",
+        "https://drive.google.com/uc?id=1G7wZm1HMOOjivdFQiBqRN1J4eLpM-e7e",
         MODEL_PATH,
-        quiet=False
+        quiet=False,
+        fuzzy=True
     )
 
 # ── APP ────────────────────────────────────────────────────
@@ -64,11 +65,11 @@ model  = CNN().to(device)
 
 # Load weights if exists, else use random weights for demo
 import os
-if os.path.exists("model.pth"):
-    model.load_state_dict(torch.load("model.pth", map_location=device))
+if os.path.exists(MODEL_PATH):
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
     print("✅ Loaded trained model")
 else:
-    print("⚠️  No model.pth found — using untrained model (train first!)")
+    print("⚠️ No model.pth found — using untrained model")
 
 model.eval()
 
