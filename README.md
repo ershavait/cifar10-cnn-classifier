@@ -32,7 +32,7 @@ Trained with:
 - **Loss:** CrossEntropyLoss
 - **Epochs:** 10
 - **Batch size:** 64
-- **Test accuracy:** ~70–72%
+- **Test accuracy:** ~76.27%
 
 ### Backend
 FastAPI server (`main.py`) that:
