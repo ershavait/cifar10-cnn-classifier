@@ -1,4 +1,4 @@
-# cifar10-cnn-classifier
+# CIFAR10-CNN-Classifier
 
 A full-stack image classification app — CNN trained on CIFAR-10, served via FastAPI, with a React frontend.
 
