@@ -1,8 +1,6 @@
-# CIFAR10-CNN-Classifier
+# cifar10-cnn-classifier
 
-A full-stack image classification app — CNN trained on CIFAR-10, served via FastAPI, with a React frontend.
-
-Upload any image and the model returns the top 5 predicted classes with confidence scores.
+A full-stack image classification app — CNN trained on CIFAR-10, served via FastAPI, with a React frontend. Upload any image and the model returns the top 5 predicted classes with confidence scores.
 
 ---
 
@@ -15,6 +13,7 @@ Upload any image and the model returns the top 5 predicted classes with confiden
 ## How It's Built
 
 ### Model
+
 A custom 3-layer CNN built in PyTorch and trained from scratch on the [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dataset (60,000 32×32 images across 10 classes).
 
 **Architecture:**
@@ -32,16 +31,18 @@ Trained with:
 - **Loss:** CrossEntropyLoss
 - **Epochs:** 10
 - **Batch size:** 64
-- **Test accuracy:** ~76.27%
+- **Test accuracy:** ~70–72%
 
 ### Backend
+
 FastAPI server (`main.py`) that:
-1. Loads the trained `model.pth`
+1. Downloads `model.pth` automatically from Google Drive on first run
 2. Accepts image uploads via `POST /classify`
 3. Resizes to 32×32, normalizes, runs inference
 4. Returns top-5 predictions with class names, icons, and probabilities
 
 ### Frontend
+
 React + Vite UI with:
 - Drag-and-drop image upload zone
 - Live classification results with animated probability bars
@@ -54,11 +55,11 @@ React + Vite UI with:
 ```
 cifar10-cnn-classifier/
 ├── backend/
-│   ├── main.py              ← FastAPI server
-│   ├── train.py             ← CNN training script
+│   ├── main.py              ← FastAPI server (auto-downloads model on first run)
+│   ├── train.py             ← CNN training script (optional)
 │   ├── CNN_for_CIFAR10.py   ← Standalone training + eval script
 │   ├── dataloader.py        ← CIFAR-10 data loading
-│   └── model.pth            ← Trained weights (generated after training)
+│   └── model.pth            ← Trained weights (auto-downloaded)
 └── frontend/
     └── src/
         ├── App.jsx
@@ -81,31 +82,39 @@ cifar10-cnn-classifier/
 - Node.js 18+
 
 ### Step 1 — Install backend dependencies
+
 ```bash
 cd backend
-pip install torch torchvision fastapi uvicorn python-multipart pillow
+pip install torch torchvision fastapi uvicorn python-multipart pillow gdown
 ```
 
-### Step 2 — Train the model
-```bash
-python train.py
-# Trains for 10 epochs, saves model.pth
-# Takes ~3 mins on GPU, ~15 mins on CPU
-```
+### Step 2 — Start the FastAPI backend
 
-### Step 3 — Start the FastAPI backend
 ```bash
 uvicorn main:app --reload --port 8000
-# API running at http://localhost:8000
 ```
 
-### Step 4 — Set up and start the React frontend
+> On first run, `model.pth` is downloaded automatically from Google Drive. No manual setup needed.
+> Requires ~50 MB free disk space.
+
+### Step 3 — Set up and start the React frontend
+
 ```bash
 cd ../frontend
 npm install
 npm run dev
 # UI running at http://localhost:5173
 ```
+
+---
+
+## Model Weights
+
+The trained weights are hosted on Google Drive and downloaded automatically when you start the backend.
+
+**[⬇️ Download model.pth manually](https://drive.google.com/file/d/1G7wZm1HMOOjivdFQiBqRN1J4eLpM-e7e/view?usp=sharing)**
+
+If you prefer to place it manually, drop `model.pth` into the `backend/` directory — the server will skip the download if the file already exists.
 
 ---
 
@@ -124,8 +133,7 @@ npm run dev
   "confidence": 99.94,
   "top5": [
     { "class": "dog",  "icon": "🐶", "probability": 99.94 },
-    { "class": "deer", "icon": "🦌", "probability": 0.06  },
-    ...
+    { "class": "deer", "icon": "🦌", "probability": 0.06  }
   ],
   "device": "cpu"
 }
