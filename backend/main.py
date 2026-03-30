@@ -1,11 +1,24 @@
 import io
 import torch
+import os
+import gdown
 import torch.nn as nn
 import torchvision.transforms as transforms
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import torch.nn.functional as F
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "model.pth")
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading model weights from Google Drive...")
+    gdown.download(
+        "https://drive.google.com/file/d/13VUYaLnwFkHEHynumTskWq_8XAQa-qn2/view?usp=sharing",
+        MODEL_PATH,
+        quiet=False
+    )
 
 # ── APP ────────────────────────────────────────────────────
 app = FastAPI(title="CIFAR-10 Classifier API")
